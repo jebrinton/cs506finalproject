@@ -64,9 +64,10 @@ We will explore multiple forecasting techniques, including:
 ---
 
 ## **Test Plan & Model Evaluation**  
-### **Training Strategy**  
-- Train the model on **historical data**, excluding the last **five years**, which will be reserved for testing.  
-- Implement **weighted training**, giving **recent data** higher importance in prediction accuracy.  
+### **Training Strategy**
+- We will train the model on the first 80% of the years, holding out 20% for testing.
+- On the current dataset we're looking at, this means we will use the first 8 years for training and 2 years for testing.
+- We will implement **weighted training**, giving **recent data** higher importance in prediction accuracy.
 
 ### **Evaluation Metrics**  
 - **Time Series Plots:** Compare actual vs. predicted values.  
