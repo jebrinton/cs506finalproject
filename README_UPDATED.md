@@ -53,7 +53,7 @@ Implemented two types of predictive models: a regression and classification mode
 - Predicting **tmrw_temp**, employed Ridge Regression, K-Nearest Neighbours (KNN) Regression, Random Forest regression, XGBoost (XGB) Regression, Gradient Boosting (GB) Regression. 
 - Predicting **tmrw_rain**, employed Logistic Regression, KNN Classifier, Random Forest Classifier, XGB Classifier, and Gb Classifier.
 
-### Analysis
+### **Backtesting and Performance Evaluation**
 Each of these methods resulted in pretty similar performance. We calculated the Mean Average Error (MAE) for each model.
 
 | Model            | MAE (max temp) | MAE (rain) |
@@ -68,8 +68,6 @@ As mentioned above, the accuracy is pretty similar, with XGBoost and Gradient Bo
 
 Performed exhuastive hyperparemeter tuning with **GridSearchCV**, which used cross-validation, to find the best n_neighbors for KNN Classifier and Regressor models. 
 
-### **Backtesting and Performance Evaluation**
-
 ---
 
 ## **SARIMA Time Series**
@@ -82,13 +80,12 @@ We used statsmodels' SARIMAX model. To explain SARIMAX, the following is a break
 2. The integrated part (*I*) is used to take out noise: it forces the time series to become stationary and subtract out anomalies. 
 3. The *MA*, or moving average part, looks at how the present value is related to past errors.
 
+### **Adding Seasonality and Exogenous Variables**
 
-Adding Seasonality and Exogenous Variables
-Seasonality (S): Standard ARIMA models do not account for seasonality, which can lead to inadequate forecasts for seasonal data. SARIMAX addresses this by including seasonal differencing and seasonal autoregressive and moving average components, tailored to the periodicity of the dataset.
-Exogenous Variables (X): These are external variables that may influence the response variable but are not the focus of the forecast. Inclusion of such variables can improve the accuracy of predictions by providing additional contextual information. Examples could include weather conditions like precipitation or wind speed.
 The issue with ARIMA for this is that it doesn't take into account seasonality. To account for this:
 
-1. We add the *S* of SARIMAX - a new set of the 3 ARIMA parameters, except they take effect based off the number of steps in a season, the 4th parameter. (So we are now at 7 hyperparameters). The reason we have an *X* in SARIMAX is due to the eXogenous features such as precipitation or windspeed—features related to what we care about, but they will just aid, we won't actually predict them.
+We add the *S* of SARIMAX - a new set of the 3 ARIMA parameters, except they take effect based off the number of steps in a season, the 4th parameter. (So we are now at 7 hyperparameters).
+The reason we have an *X* in SARIMAX is due to the eXogenous features such as precipitation or windspeed—features related to what we care about, but they will just aid, we won't actually predict them.
 
 ### **Model Training and Performance**
 
@@ -101,33 +98,3 @@ The SARIMAX model was applied to a dataset spanning several decades with the fol
 ### **Observations and Adjustments**
 Forecast Accuracy: It is observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
 Leap Years: The model might need adjustments to accommodate the effects of leap years in long-term forecasts, as these add an extra day periodically that could slightly alter seasonal patterns.
-
----
-
-## **Data Modeling**  
-### **Model Architecture & Learning Approach**  
-We will explore multiple forecasting techniques, including:  
-- **Autoregressive Integrated Moving Average (ARIMA):**  
-  - **p:** Number of past observations  
-  - **d:** Differencing to remove trends  
-  - **q:** Moving average  
-- **Machine Learning Models:**  
-  - **XGBoost** and other ML techniques introduced in class  
-
-
-## **Data Visualization & User Interaction**  
-### **Geospatial Representation**  
-
-
-## **Test Plan & Model Evaluation**  
-### **Training Strategy**
-- We will train the model on the first 80% of the years, holding out 20% for testing.
-- On the current dataset we're looking at, this means we will use the first 8 years for training and 2 years for testing.
-- We will implement **weighted training**, giving **recent data** higher importance in prediction accuracy.
-
-### **Evaluation Metrics**  
-- **Time Series Plots:** Compare actual vs. predicted values.  
-- **Uncertainty Bands:** Visualize **confidence intervals** for forecast reliability.  
-- **Performance Analysis:** Use **statistical significance testing** to assess model robustness.  
-
----
