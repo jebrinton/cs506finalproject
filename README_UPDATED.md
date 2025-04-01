@@ -42,7 +42,7 @@ Our project aims to develop a predictive model for weather and climate change in
 
 ---
 
-## **Maximum Temperature Regression and Precipitation Classification **
+## **Maximum Temperature Regression and Precipitation Classification**
 
 ### **Response Variable Creation**
 - **tmrw_temp:** Maximum temperature of the next day (regression based), created by shifting current day's maximum temperature. 
