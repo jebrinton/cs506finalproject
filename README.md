@@ -1,5 +1,5 @@
 
-# **CS506 Final Project Proposal**  
+# **CS506 Final Project Proposal**  (Please scroll below to view the Midterm Report which was due 03/31)
 ## **Team Members**  
 - **Afitab Iyigun**  
 - **Jacob Brinton**  
@@ -75,3 +75,82 @@ We will explore multiple forecasting techniques, including:
 - **Performance Analysis:** Use **statistical significance testing** to assess model robustness.  
 
 ---
+
+# Midterm Report (Updated on 03/31)
+
+## Introduction
+
+This midterm report details the methodology, processes, and results of our weather prediction model. Our model attempts to forecast maximum daily temperature (`TMAX`) and precipitation (`PRCP`). Our analysis includes data cleaning, feature engineering, training of various ML models, and performance evaluation across different time horizons.  
+
+---
+
+## Data Overview
+
+Our dataset comprises daily weather records in Boston, indexed by date. The dataset contains three main variables:
+
+- **TMAX**: Maximum daily temperature
+- **TMIN**: Minimum daily temperature
+- **PRCP**: Precipitation (rainfall) in mm  
+
+---
+
+## Data Preprocessing and Cleaning
+
+We implemented the following preprocessing steps:
+
+- **Handling missing values**: Columns with more than 1% missing data were removed, and missing values in `PRCP` were replaced with 0.
+- **Handling of date**: The `DATE` column was converted to datetime format and set as the index.
+- **Feature correlation analysis**: We observed a high correlation between `TMAX` and `TMIN`. Additionally, `TMAX` was strongly correlated with `tmrw_temp`, justifying its predictive relevance.
+- **Creation of response variables** (with scaling applied where necessary for model stability):
+  - `tmrw_temp`: Maximum temperature of the next day (response variable for regression), created using a one-day shift in `TMAX`.
+  - `tmrw_rain`: A probability value between 0 and 1 indicating the likelihood of rain occurring the next day. It was converted to a binary indicator (0 or 1) where 0 represents no rain and 1 represents rain.
+- **Brief visualization**: We created time-series plots for `TMAX` and `PRCP` over a 10-year period.
+
+---
+
+## Model Selection and Training
+
+We implemented two types of predictive models: a regression model for `tmrw_temp` and a classification model for `tmrw_rain`.
+
+- **Regression Models for `tmrw_temp`**:
+  - Ridge Regression
+  - K-Nearest Neighbors (KNN) Regression
+  - Random Forest (RF) Regression
+  - XGBoost (XGB) Regression
+  - Gradient Boosting Regression (GBR)
+  
+- **Classification Models for `tmrw_rain`**:
+  - Ridge Regression
+  - K-Nearest Neighbors (KNN) Classifier
+  - Random Forest Classifier
+  - XGBoost Classifier
+  - Gradient Boosting Classifier
+
+---
+
+## Backtesting and Performance Evaluation + Visualization
+
+We tested model performance over different time horizons: 10-year and 30-year data samples.
+
+- **Mean Absolute Error (MAE) for Temperature Prediction**:
+  - Random Forest, XGBoost, and Gradient Boosting performed best.
+  - Increasing training data from 10 years to 30 years improved accuracy.
+
+- **Rain Prediction Accuracy Evaluation**:
+  - Random Forest, XGBoost, and Gradient Boosting performed best.
+  - We created a time-series step plot comparing predicted and actual rain occurrences between Jan 2024 and Jan 2025.
+
+- **Additional Visualization**:
+  - MAE bar charts comparing model performance for 10-year and 30-year training periods.
+
+---
+
+## Possible Extensions
+
+To further improve our project, we plan to:
+
+- Include additional meteorological features such as humidity and wind speed to enhance predictive accuracy.
+- Explore using Singular Value Decomposition (SVD) to create feature combinations, as interpretability is not our primary focus.
+
+
+
