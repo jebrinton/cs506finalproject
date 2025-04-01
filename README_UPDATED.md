@@ -97,4 +97,5 @@ The SARIMAX model was applied to a dataset spanning several decades with the fol
 
 ### **Observations and Adjustments**
 Forecast Accuracy: It is observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
+
 Leap Years: The model might need adjustments to accommodate the effects of leap years in long-term forecasts, as these add an extra day periodically that could slightly alter seasonal patterns.
