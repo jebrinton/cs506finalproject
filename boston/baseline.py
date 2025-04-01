@@ -12,20 +12,21 @@ miss_pct = dataset.apply(pd.isnull).sum()/dataset.shape[0]
 # List columns with low miss_pct (good columns); feel free to tweak the threshold of how low we want missing values to be.
 good_columns = dataset.columns[miss_pct < 0.01]
 dataset = dataset[good_columns].copy()
-dataset.apply(pd.isnull).sum()/dataset.shape[0]
 
-# Since the "PRCP" column has missin values, we fill the missing values with zero since
-# if there was no PRCP recorded for that day then that must mean that it did not rain therefore PRCP would be zero
+# Fill the missing values in PRCP column with zero (assuming default is no rain)
 dataset["PRCP"] = dataset["PRCP"].fillna(0)
 
-dataset.apply(pd.isnull).sum() / dataset.shape[0]
+# Otherwise, fill in NaN with linear interpolation
+dataset = dataset.infer_objects(copy=False)
+dataset = dataset.interpolate(method='linear')
 
-# Fill in NaN
-df = df.interpolate(method='linear')
-
-# get the average difference in max tempurature between days
-print(df)
+# get the average difference in max temperature between days
+print(dataset)
 # %%
-diff = np.diff(df['TMAX'].values)
+temp_diff = np.diff(dataset['TMAX'].values)
+prcp_diff = np.diff((dataset["PRCP"] > 0).astype(int))
 
-print("MAE if predicted tomorrow's max with today's max: ", diff.sum().round(4))
+print("MAE if predicting tomorrow's max with today's max: ", np.mean(np.abs(temp_diff)))
+print("% error if predicting tomorrow's rain with today's rain: ", np.mean(np.abs(prcp_diff)))
+
+# %%
