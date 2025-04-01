@@ -89,9 +89,9 @@ The reason we have an *X* in SARIMAX is due to the eXogenous features such as pr
 
 ### **Model Training and Performance**
 
-The SARIMAX model was applied to a dataset spanning several decades with the following training and prediction periods. Then, the mean average error (MAE) was calculated for the real temperature data. 
+The SARIMAX model was applied to a dataset spanning several decades with the following training and prediction periods. Then, the MAE was calculated for the real temperature data. 
 
-1. Training on 39 years and predicting the next year, the mean absolute error (MAE) was 6.10.
+1. Training on 39 years and predicting the next year, the MAE was 6.10.
 2. Training on 30 years and predicting the next 10 years, the MAE was 12.32.
 3. Training on 10 years and predicting the next 30 years, the MAE was 20.65.
 
