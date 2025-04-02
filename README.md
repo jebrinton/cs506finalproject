@@ -27,7 +27,6 @@ Our project aims to develop a predictive model for weather and climate change in
 - The primary data source is the **Boston 1970-2025 Daily Summaries Dataset**. 
 - Initially, we engaged with the NOAA Daily Meteorological Summaries database, focusing on global major station daily weather summaries. However, we encountered challenges related to data handling and processing when utilizing station-based datasets. To refine our approach and enhance our model training and testing processes, we have decided to shift our focus toward a city-specific daily summary dataset, beginning with Boston.
 
-
 ### **Key Features of the Dataset**  
 - **Temperature:** Maximum & minimum (°F or °C)  
 - **Precipitation:** Rainfall (mm or inches)  
@@ -36,15 +35,16 @@ Our project aims to develop a predictive model for weather and climate change in
 - **Cloudiness:** Recorded via ceilometer and manual observations  
 
 ### **Data Cleaning**
-- The DATE column was converted to datetime format and fixed as the index. 
-- Dropping columns that have less that 97% of data and filling in NaNs. Specifically for precipitation data, filling in NaN values that correspond to no rain with 0. 
-- 
+- The DATE column was converted to datetime format and fixed as the index.
+- All other non-numeric columns (e.g. Station Name) were dropped.
+- Dropping columns that have less that 99% of data and filling in NaNs in by using context from adjacent days (linear interpolation).
 
 ---
 
 ## **Maximum Temperature Regression and Precipitation Classification**
 
 ### **Response Variable Creation**
+*Baseline Question:* Can we predict tomorrow's weather with today's weather? Can we predict tomorrow's max temperature or precipitation with today's data?
 - **tmrw_temp:** Maximum temperature of the next day (regression based), created by shifting current day's maximum temperature. 
 - **tmrw_rain:** Binary indicator (0 or 1) for rain occurrence the next day (classification based).
  
@@ -54,7 +54,12 @@ Implemented two types of predictive models: a regression and classification mode
 - Predicting **tmrw_rain**, employed Logistic Regression, KNN Classifier, Random Forest Classifier, XGB Classifier, and Gb Classifier.
 
 ### **Backtesting and Performance Evaluation**
-Each of these methods resulted in pretty similar performance. We calculated the Mean Average Error (MAE) for each model.
+
+**Backtest Function:** Backtesting is a way to verify that our future weather forecasting would be correct by validating it on past data. We performed backtesting on our dataset by taking in a temperature regression model and a rain classification model (as tmrw_rain is a binary indication of if it rains tomorrow or not). For each iteration, we trained our models on all preceding data and test on the next 90 days. 
+
+**Parameter Finetuning:** For KNN Classifier and Regressor models, Performed exhuastive hyperparemeter tuning with **GridSearchCV**, which used cross-validation, to find the best n_neighbors. 
+
+**Results:** Each of these methods resulted in pretty similar performance. We calculated the Mean Average Error (MAE) for each model.
 
 | Model            | MAE (max temp) | MAE (rain) |
 |------------------|-------|-----------|
@@ -65,8 +70,6 @@ Each of these methods resulted in pretty similar performance. We calculated the 
 | Gradient Boosting | 6.085 | 0.347     |
 
 As mentioned above, the accuracy is pretty similar, with XGBoost and Gradient Boosting with the highest performance.
-
-Performed exhuastive hyperparemeter tuning with **GridSearchCV**, which used cross-validation, to find the best n_neighbors for KNN Classifier and Regressor models. 
 
 ---
 
@@ -91,11 +94,13 @@ The reason we have an *X* in SARIMAX is due to the eXogenous features such as pr
 
 The SARIMAX model was applied to a dataset spanning several decades with the following training and prediction periods. Then, the MAE was calculated for the real temperature data. 
 
-1. Training on 39 years and predicting the next year, the MAE was 6.10.
-2. Training on 30 years and predicting the next 10 years, the MAE was 12.32.
-3. Training on 10 years and predicting the next 30 years, the MAE was 20.65.
+1. Training on 10 years and predicting the next 30 years, the MAE was 20.65.
+2. Training on 20 years and predicting the next 20 years, the MAE was 18.23.
+3. Training on 30 years and predicting the next 10 years, the MAE was 12.32.
+4. Training on 39 years and predicting the next year, the MAE was 6.10.
+5. Training on 39 years and predicting a tenth of a year (0.1), the MAE was 2.07.
 
 ### **Observations and Adjustments**
-Forecast Accuracy: It is observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
+Forecast Accuracy: wE observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
 
 Leap Years: The model might need adjustments to accommodate the effects of leap years in long-term forecasts, as these add an extra day periodically that could slightly alter seasonal patterns.
