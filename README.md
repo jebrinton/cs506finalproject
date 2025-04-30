@@ -1,4 +1,4 @@
-# **CS506 Final Project Proposal**  
+# **CS506 Final Project **  
 ## **Team Members**  
 - **Afitab Iyigun** 
 - **Jacob Brinton** 
