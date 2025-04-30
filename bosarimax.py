@@ -11,7 +11,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 # sample per  5 days = 187.8 second fit
 SAMPLE_FACTOR = 30
 
-TEST_YEARS = 0.1
+TEST_YEARS = 5
 TRAIN_YEARS = 40 - TEST_YEARS
 
 RESPONSE_VAR = "TMAX"
@@ -108,19 +108,29 @@ s = (int) (365 / SAMPLE_FACTOR)
 
 X = ['PRCP', 'SNOW', 'TMIN']
 
-exog_train = sampled_train[X]
-
 model = SARIMAX(sampled_train[RESPONSE_VAR],
                 order=(p, d, q),
                 seasonal_order=(P, D, Q, s),
-                exog=exog_train)
+                exog=sampled_train[X])
 
 sarimaX = model.fit()
 
 # %%
 # Forecast with Exegenous Variables
 
-exog_forecast = sampled_test[X]  # Make sure this is aligned with test_steps
+exog_forecast = pd.DataFrame()
+
+for var in X:
+    model = SARIMAX(sampled_train[var], order=(1,1,1), seasonal_order=(1,1,1,12))
+    results = model.fit()
+    forecast = results.forecast(steps=test_steps)
+    exog_forecast[var] = forecast.values
+
+exog_forecast.index = pd.date_range(
+    start=sampled_train.index[-1] + pd.Timedelta(days=1),
+    periods=test_steps
+)
+
 predictions = sarimaX.forecast(test_steps, exog=exog_forecast)
 
 freq_title = f"{SAMPLE_FACTOR}D"
