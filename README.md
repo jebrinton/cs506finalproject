@@ -102,3 +102,78 @@ The SARIMAX model was applied to a dataset spanning several decades with the fol
 Forecast Accuracy: wE observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
 
 Leap Years: The model might need adjustments to accommodate the effects of leap years in long-term forecasts, as these add an extra day periodically that could slightly alter seasonal patterns.
+
+
+---
+
+# Neural Network Temperature Forecasting
+
+## Model Architecture
+
+This project uses a feedforward neural network (specifically `MLPRegressor` from `scikit-learn`) to forecast future daily maximum temperatures (`TMAX`). The model learns using historical data and cyclical date features to improve seasonal awareness.
+
+### Key Components:
+1. **Lookback Window (30 days)**: The model uses the past 30 days of data to predict the next day.
+2. **Date-Based Features**: To capture seasonality, four cyclical features are added:
+   - sin(month), cos(month)
+   - sin(day_of_year), cos(day_of_year)
+3. **MLPRegressor Hyperparameters**:
+   - Hidden layers (e.g., (256, 128))
+   - Regularization strength (`alpha`)
+   - Learning rate (`learning_rate_init`)
+
+---
+
+## Adding Seasonality with Engineered Features
+
+While MLP does not inherently model seasonality like SARIMA, we incorporate periodic patterns using cyclical transformations of month and day-of-year. These serve as proxies for seasonal cycles, helping the model distinguish between, say, July and January.
+
+---
+
+## Model Training and Performance
+
+The model was trained on 45 years of historical data and evaluated on the most recent 11 years using a grid search across multiple hyperparameters.
+
+### Sample Results from Grid Search:
+| Hidden Layers     | Alpha | LR Init | MAE (°F) |
+|-------------------|-------|---------|----------|
+| (256, 128)        | 1e-2  | 5e-4    | **2.95** |
+| (128, 64, 32)     | 1e-4  | 1e-3    | 3.27     |
+| (256, 128)        | 1e-4  | 1e-3    | 3.08     |
+| (128, 64, 32)     | 1e-2  | 5e-4    | 3.46     |
+
+---
+
+## Future Forecasting
+
+Using the best model from above, we retrained on the **entire historical dataset** and forecasted daily maximum temperatures for the next **20 years**.
+
+- **Recursive Forecasting**: Predictions are made day-by-day, using each new prediction as part of the next input.
+- **Future Features**: Future sin/cos month and day values were precomputed to guide the network in handling seasonal context.
+
+---
+
+## Output
+
+- **Plot**: Displays full temperature history + forecasted values until the year 2045.
+- **CSV**: Forecasted temperatures saved in `NN_Predictions.csv`.
+
+---
+
+## Observations and Adjustments
+
+- **Forecast Accuracy**: Unlike SARIMA, the NN doesn’t degrade drastically with long-term forecasts due to its use of engineered cyclical features and deep learning flexibility.
+- **Training Stability**: Early stopping prevents overfitting during training.
+- **Leap Years**: Not explicitly handled, though cyclical features may indirectly account for this.
+
+---
+
+## File Summary
+
+| File                     | Description                                       |
+|--------------------------|---------------------------------------------------|
+| `NN_forecast.py`         | Main script containing training and forecasting  |
+| `Miami.csv`              | Input weather dataset                            |
+| `NN_Predictions.csv`     | Output file with 20-year daily temperature forecast |
+
+---
