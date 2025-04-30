@@ -133,7 +133,7 @@ plt.plot(pred_series, label='SARIMA Prediction', color='orange', linestyle='--')
 #     label='Confidence Range'
 # )
 
-plt.title('Maximum Temp Prediction with SARIMAX')
+plt.title('Maximum Temp Prediction with SARIMA')
 plt.xlabel('Date')
 plt.ylabel('Temp (°F)')
 plt.legend()
