@@ -75,7 +75,7 @@ As mentioned above, the accuracy is pretty similar, with XGBoost and Gradient Bo
 
 ### **ARIMA Model Architecture**
 
-We used statsmodels' SARIMAX model. To explain SARIMAX, the following is a break down of what ARIMA models are:
+We used statsmodels' SARIMA model. To explain SARIMA, the following is a break down of what ARIMA models are:
 
 1. The *AR* stands for the autoregressive order; it is the number of past values we should take into account when predicting each new value. 
 2. The integrated part (*I*) is used to take out noise: it forces the time series to become stationary and subtract out anomalies. 
@@ -98,21 +98,15 @@ The SARIMAX model was applied to a dataset spanning several decades with the fol
 4. Training on 39 years and predicting the next year, the MAE was 6.10.
 5. Training on 39 years and predicting a tenth of a year (0.1), the MAE was 2.07.
 
-### **Observations and Adjustments**
-Forecast Accuracy: wE observed that the forecast accuracy decreases as the prediction horizon increases. This degradation in performance over longer forecast periods can be attributed to the increasing uncertainty and potential changes in underlying patterns over time.
-
-Leap Years: The model might need adjustments to accommodate the effects of leap years in long-term forecasts, as these add an extra day periodically that could slightly alter seasonal patterns.
-
-
 ---
 
-# Neural Network Temperature Forecasting
+## Neural Network Temperature Forecasting
 
-## Model Architecture
+### Model Architecture
 
 This project uses a feedforward neural network (specifically `MLPRegressor` from `scikit-learn`) to forecast future daily maximum temperatures (`TMAX`). The model learns using historical data and cyclical date features to improve seasonal awareness.
 
-### Key Components:
+#### Key Components:
 1. **Lookback Window (30 days)**: The model uses the past 30 days of data to predict the next day.
 2. **Date-Based Features**: To capture seasonality, four cyclical features are added:
    - sin(month), cos(month)
@@ -124,17 +118,17 @@ This project uses a feedforward neural network (specifically `MLPRegressor` from
 
 ---
 
-## Adding Seasonality with Engineered Features
+### Adding Seasonality with Engineered Features
 
 While MLP does not inherently model seasonality like SARIMA, we incorporate periodic patterns using cyclical transformations of month and day-of-year. These serve as proxies for seasonal cycles, helping the model distinguish between, say, July and January.
 
 ---
 
-## Model Training and Performance
+### Model Training and Performance
 
 The model was trained on 45 years of historical data and evaluated on the most recent 11 years using a grid search across multiple hyperparameters.
 
-### Sample Results from Grid Search:
+#### Sample Results from Grid Search:
 | Hidden Layers     | Alpha | LR Init | MAE (°F) |
 |-------------------|-------|---------|----------|
 | (256, 128)        | 1e-2  | 5e-4    | **2.95** |
@@ -144,7 +138,7 @@ The model was trained on 45 years of historical data and evaluated on the most r
 
 ---
 
-## Future Forecasting
+### Future Forecasting
 
 Using the best model from above, we retrained on the **entire historical dataset** and forecasted daily maximum temperatures for the next **20 years**.
 
@@ -153,14 +147,14 @@ Using the best model from above, we retrained on the **entire historical dataset
 
 ---
 
-## Output
+### Output
 
 - **Plot**: Displays full temperature history + forecasted values until the year 2045.
 - **CSV**: Forecasted temperatures saved in `NN_Predictions.csv`.
 
 ---
 
-## Observations and Adjustments
+### Observations and Adjustments
 
 - **Forecast Accuracy**: Unlike SARIMA, the NN doesn’t degrade drastically with long-term forecasts due to its use of engineered cyclical features and deep learning flexibility.
 - **Training Stability**: Early stopping prevents overfitting during training.
