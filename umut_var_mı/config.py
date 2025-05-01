@@ -1,5 +1,5 @@
 MODELS = {
-    "sarima"
+    "sarima",
 }
 RESPONSE_VAR = "TMAX"
 SAMPLE_FACTOR = 30
