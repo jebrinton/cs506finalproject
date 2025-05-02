@@ -17,7 +17,17 @@ Our project aims to develop a predictive model for weather and climate change fo
 ### **Goals**  
 - Utilize historical climate data to make **long-term weather predictions**.  
 - Explore and compare various **statistical and machine learning (ML) models** for forecasting.  
-- Evaluate model accuracy and incorporate feedback from **weather experts at Boston University**.  
+- Evaluate model accuracy and incorporate feedback from **weather experts at Boston University**.
+
+### Timeline
+
+We initially started off forecasting the maximum temperature and precipitation in Boston using classification and regression models, guessing tomorrow’s max temperature and precipitation using today’s temperature and rain indicator. *(Section Previous Models: Maximum Temperature Regression and Precipitation Classification)* However, we soon discovered that these models were not performing great as they failed to account for a critical component—seasonality. With such regression and classification models, you can imagine if we were forced to extend our predictions from tomorrow’s temperature and rain to next week’s and next month’s, they would become more and more divergent from the actual weather.
+
+Hence, to account for seasonality, we used a time series model: SARIMA, which stands for Seasonal Auto-Regressive Integrated Moving Average. *(Section Previous Models: SARIMA Time Series)* 
+
+To improve our prediction accuracies, we created a feedforward neural network by adding seasonality factor with engineered features. *(Section Final Model: Neural Network Temperature Forecasting)* 
+
+
 ---
 
 ## **Data Collection & Preparation**  
@@ -35,20 +45,21 @@ Our project aims to develop a predictive model for weather and climate change fo
 - All other non-numeric columns (e.g. Station Name) were dropped.
 - Dropping columns that have less that 99% of data and filling in NaNs in by using context from adjacent days (linear interpolation).
 
+## Previous Models
 
-## **Maximum Temperature Regression and Precipitation Classification**
+### **Maximum Temperature Regression and Precipitation Classification**
 
-### **Response Variable Creation**
+#### **Response Variable Creation**
 *Baseline Question:* Can we predict tomorrow's weather with today's weather? Can we predict tomorrow's max temperature or precipitation with today's data?
 - **tmrw_temp:** Maximum temperature of the next day (regression based), created by shifting current day's maximum temperature. 
 - **tmrw_rain:** Binary indicator (0 or 1) for rain occurrence the next day (classification based).
  
-### **Model Selection and Performance**
+#### **Model Selection and Performance**
 Implemented two types of predictive models: a regression and classification model. 
 - Predicting **tmrw_temp**, employed Ridge Regression, K-Nearest Neighbours (KNN) Regression, Random Forest regression, XGBoost (XGB) Regression, Gradient Boosting (GB) Regression. 
 - Predicting **tmrw_rain**, employed Logistic Regression, KNN Classifier, Random Forest Classifier, XGB Classifier, and Gb Classifier.
 
-### **Backtesting and Performance Evaluation**
+#### **Backtesting and Performance Evaluation**
 
 **Backtest Function:** Backtesting is a way to verify that our future weather forecasting would be correct by validating it on past data. We performed backtesting on our dataset by taking in a temperature regression model and a rain classification model (as tmrw_rain is a binary indication of if it rains tomorrow or not). For each iteration, we trained our models on all preceding data and test on the next 90 days. 
 
@@ -67,9 +78,9 @@ Implemented two types of predictive models: a regression and classification mode
 As mentioned above, the accuracy is pretty similar, with XGBoost and Gradient Boosting with the highest performance.
 
 
-## **SARIMA Time Series**
+### **SARIMA Time Series**
 
-### **ARIMA Model Architecture**
+#### **ARIMA Model Architecture**
 
 We used statsmodels' SARIMA model. To explain SARIMA, the following is a break down of what ARIMA models are:
 
@@ -77,16 +88,16 @@ We used statsmodels' SARIMA model. To explain SARIMA, the following is a break d
 2. The integrated part (*I*) is used to take out noise: it forces the time series to become stationary and subtract out anomalies. 
 3. The *MA*, or moving average part, looks at how the present value is related to past errors.
 
-### **Adding Seasonality and Exogenous Variables**
+#### **Adding Seasonality and Exogenous Variables**
 
 The issue with ARIMA for this is that it doesn't take into account seasonality. To account for this:
 
-We add the *S* of SARIMAX - a new set of the 3 ARIMA parameters, except they take effect based off the number of steps in a season, the 4th parameter. (So we are now at 7 hyperparameters).
+We add the *S* of SARIMA - a new set of the 3 ARIMA parameters, except they take effect based off the number of steps in a season, the 4th parameter. (So we are now at 7 hyperparameters).
 The reason we have an *X* in SARIMAX is due to the eXogenous features such as precipitation or windspeed—features related to what we care about, but they will just aid, we won't actually predict them.
 
-### **Model Training and Performance**
+#### **Model Training and Performance**
 
-The SARIMAX model was applied to a dataset spanning several decades with the following training and prediction periods. Then, the MAE was calculated for the real temperature data. 
+The SARIMA model was applied to a dataset spanning several decades with the following training and prediction periods. Then, the MAE was calculated for the real temperature data. 
 
 1. Training on 10 years and predicting the next 30 years, the MAE was 20.65.
 2. Training on 20 years and predicting the next 20 years, the MAE was 18.23.
@@ -96,7 +107,7 @@ The SARIMAX model was applied to a dataset spanning several decades with the fol
 
 ---
 
-## Neural Network Temperature Forecasting
+## Final Model: Neural Network Temperature Forecasting
 
 ### Model Architecture
 
@@ -158,12 +169,7 @@ Using the best model from above, we retrained on the **entire historical dataset
 
 ---
 
-## File Summary
+## Reproducibility
 
-| File                     | Description                                       |
-|--------------------------|---------------------------------------------------|
-| `NN_forecast.py`         | Main script containing training and forecasting  |
-| `Miami.csv`              | Input weather dataset                            |
-| `NN_Predictions.csv`     | Output file with 20-year daily temperature forecast |
 
 ---
