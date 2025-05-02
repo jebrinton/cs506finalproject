@@ -27,7 +27,6 @@ Hence, to account for seasonality, we used a time series model: SARIMA, which st
 
 To improve our prediction accuracies, we created a feedforward neural network by adding seasonality factor with engineered features. *(Section Final Model: Neural Network Temperature Forecasting)* 
 
-
 ---
 
 ## **Data Collection & Preparation**  
@@ -35,11 +34,12 @@ To improve our prediction accuracies, we created a feedforward neural network by
 ### **Primary Data Sources**  
 - The primary data source is **cdc.noaa.gov/cdo-web/search**.
 - All 6 cities were retrieved from the above link, and combined into one .csv file.
-- The 6 cities are: Boston, Buenos Aires, Darwin, New York, Madrid, Vladivostok. 
+- The 6 cities are: Boston, Buenos Aires, Darwin, New York, Madrid, Vladivostok.
+  
 ### **Key Features of the Dataset**  
 - **Temperature:** Maximum (°F)  
 - **Precipitation:** Rainfall (mm or inches)
-- 
+  
 ### **Data Cleaning** 
 - The DATE column was converted to datetime format and fixed as the index.
 - All other non-numeric columns (e.g. Station Name) were dropped.
@@ -88,7 +88,7 @@ We used statsmodels' SARIMA model. To explain SARIMA, the following is a break d
 2. The integrated part (*I*) is used to take out noise: it forces the time series to become stationary and subtract out anomalies. 
 3. The *MA*, or moving average part, looks at how the present value is related to past errors.
 
-#### **Adding Seasonality and Exogenous Variables**
+#### **Adding Seasonalitys**
 
 The issue with ARIMA for this is that it doesn't take into account seasonality. To account for this:
 
@@ -111,7 +111,7 @@ The SARIMA model was applied to a dataset spanning several decades with the foll
 
 ### Model Architecture
 
-This project uses a feedforward neural network (specifically `MLPRegressor` from `scikit-learn`) to forecast future daily maximum temperatures (`TMAX`). The model learns using historical data and cyclical date features to improve seasonal awareness.
+This model uses a feedforward neural network (specifically `MLPRegressor` from `scikit-learn`) to forecast future daily maximum temperatures (`TMAX`). The model learns using historical data and cyclical date features to improve seasonal awareness.
 
 #### Key Components:
 1. **Lookback Window (30 days)**: The model uses the past 30 days of data to predict the next day.
@@ -127,7 +127,7 @@ This project uses a feedforward neural network (specifically `MLPRegressor` from
 
 ### Adding Seasonality with Engineered Features
 
-While MLP does not inherently model seasonality like SARIMA, we incorporate periodic patterns using cyclical transformations of month and day-of-year. These serve as proxies for seasonal cycles, helping the model distinguish between, say, July and January.
+While MLP does not inherently model seasonality like SARIMA, we incorporated periodic patterns using cyclical transformations of month and day-of-year. These served as proxies for seasonal cycles, helping our model distinguish between, say, July and January.
 
 ---
 
