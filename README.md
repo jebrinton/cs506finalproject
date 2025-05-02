@@ -12,29 +12,25 @@
 Youtube Link: https://youtu.be/k0vcuHoykxI
 
 ### **Objective**  
-Our project aims to develop a predictive model for weather and climate change in a given city. Additionally, the model will identify a "Twin City"—a city with similar weather and climate patterns.  
+Our project aims to develop a predictive model for weather and climate change for 6 cities around the world, and compare our models' performances for the 6 cities.
 
 ### **Goals**  
 - Utilize historical climate data to make **long-term weather predictions**.  
 - Explore and compare various **statistical and machine learning (ML) models** for forecasting.  
 - Evaluate model accuracy and incorporate feedback from **weather experts at Boston University**.  
-
 ---
 
 ## **Data Collection & Preparation**  
 
 ### **Primary Data Sources**  
-- The primary data source is the **Boston 1970-2025 Daily Summaries Dataset**. 
-- Initially, we engaged with the NOAA Daily Meteorological Summaries database, focusing on global major station daily weather summaries. However, we encountered challenges related to data handling and processing when utilizing station-based datasets. To refine our approach and enhance our model training and testing processes, we have decided to shift our focus toward a city-specific daily summary dataset, beginning with Boston.
-
+- The primary data source is **cdc.noaa.gov/cdo-web/search**.
+- All 6 cities were retrieved from the above link, and combined into one .csv file.
+- The 6 cities are: Boston, Buenos Aires, Darwin, New York, Madrid, Vladivostok. 
 ### **Key Features of the Dataset**  
-- **Temperature:** Maximum & minimum (°F or °C)  
-- **Precipitation:** Rainfall (mm or inches)  
-- **Snowfall & Snow Depth:** Measured in mm or inches  
-- **Wind Speed:** Average daily speed (m/s or mph)  
-- **Cloudiness:** Recorded via ceilometer and manual observations  
-
-### **Data Cleaning**
+- **Temperature:** Maximum (°F)  
+- **Precipitation:** Rainfall (mm or inches)
+- 
+### **Data Cleaning** 
 - The DATE column was converted to datetime format and fixed as the index.
 - All other non-numeric columns (e.g. Station Name) were dropped.
 - Dropping columns that have less that 99% of data and filling in NaNs in by using context from adjacent days (linear interpolation).
