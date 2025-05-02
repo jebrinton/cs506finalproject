@@ -133,15 +133,18 @@ While MLP does not inherently model seasonality like SARIMA, we incorporated per
 
 ### Model Training and Performance
 
-The model was trained on 45 years of historical data and evaluated on the most recent 11 years using a grid search across multiple hyperparameters.
+The model was trained on 45 years of historical data and evaluated on the most recent 10 years using a grid search across multiple hyperparameters for each city out of the 6 cities.
 
-#### Sample Results from Grid Search:
-| Hidden Layers     | Alpha | LR Init | MAE (°F) |
-|-------------------|-------|---------|----------|
-| (256, 128)        | 1e-2  | 5e-4    | **2.95** |
-| (128, 64, 32)     | 1e-4  | 1e-3    | 3.27     |
-| (256, 128)        | 1e-4  | 1e-3    | 3.08     |
-| (128, 64, 32)     | 1e-2  | 5e-4    | 3.46     |
+Here is how the model performed for each city:
+
+- Boston : MAE=7.2285
+- Buenos Aires : MAE=5.3350
+- Darwin: MAE=2.3335
+- New York: MAE=5.9301
+- Madrid : MAE=5.8432
+- Vladivostok : MAE=6.6314
+
+Conclusion: our model performed best for the city of Darwin, since the TMAX does not flucuate as much as the other cities we experimented on.
 
 ---
 
