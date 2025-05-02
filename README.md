@@ -9,7 +9,8 @@
 ## **Project Overview**  
 
 ### Presentations Video ###
-Youtube Link: https://youtu.be/k0vcuHoykxI
+https://youtu.be/JMkNOV8DOMc
+
 
 ### **Objective**  
 Our project aims to develop a predictive model for weather and climate change for 6 cities around the world, and compare our models' performances for the 6 cities.
@@ -178,8 +179,5 @@ Run `pip install -r requirements.txt` on the terminal
 
 Then run `python NN_6cities.ipynb`
 
-## Link
-
-https://youtu.be/JMkNOV8DOMc
 
 ---
