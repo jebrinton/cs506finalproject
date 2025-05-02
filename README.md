@@ -174,5 +174,8 @@ Using the best model from above, we retrained on the **entire historical dataset
 
 ## Reproducibility
 
+Run `pip install -r requirements.txt` on the terminal
+
+Then run `python NN_6cities.ipynb`
 
 ---
